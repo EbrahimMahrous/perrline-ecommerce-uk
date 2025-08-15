@@ -1,0 +1,172 @@
+/* =========================
+   Global Color Variables
+   ========================= */
+:root {
+  /* Primary Colors */
+  --primary-gold: #c79c40;
+  --primary-gold-dark: #a17d33;
+  --primary-gold-light: #e3bb63;
+
+  /* Accent Colors */
+  --accent-brown: #5a4632;
+  --accent-cream: #f8f3e6;
+  --accent-green: #6d8c3d;
+  --accent-blue: #3a6c85;
+
+  /* Background Colors */
+  --bg-primary: #ffffff;
+  --bg-secondary: #faf8f4;
+
+  /* Text Colors */
+  --text-primary: #1e1e1e;
+  --text-secondary: #5b5b5b;
+  --text-white: #ffffff;
+  --text-muted: #8a8a8a;
+
+  /* Border Colors */
+  --border-light: #e4e2dd;
+  --border-medium: #c4c0b7;
+
+  /* Shadows */
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1),
+    0 4px 6px -2px rgb(0 0 0 / 0.05);
+}
+
+/* =========================
+   Utility Classes - Text
+   ========================= */
+.text-primary {
+  color: var(--text-primary);
+}
+.text-secondary {
+  color: var(--text-secondary);
+}
+.text-white {
+  color: var(--text-white);
+}
+.text-muted {
+  color: var(--text-muted);
+}
+
+/* =========================
+   Utility Classes - Background
+   ========================= */
+.bg-gold {
+  background-color: var(--primary-gold);
+}
+.bg-gold-light {
+  background-color: var(--primary-gold-light);
+}
+.bg-accent-blue {
+  background-color: var(--accent-blue);
+}
+.bg-accent-green {
+  background-color: var(--accent-green);
+}
+.bg-accent-brown {
+  background-color: var(--accent-brown);
+}
+.bg-accent-cream {
+  background-color: var(--accent-cream);
+}
+.bg-primary {
+  background-color: var(--bg-primary);
+}
+.bg-secondary {
+  background-color: var(--bg-secondary);
+}
+
+/* =========================
+   Utility Classes - Hover
+   ========================= */
+.hover-gold:hover {
+  background-color: var(--primary-gold-dark);
+  color: var(--text-white);
+}
+.hover-accent-blue:hover {
+  background-color: #2d5467;
+  color: var(--text-white);
+}
+.hover-accent-green:hover {
+  background-color: #556c2e;
+  color: var(--text-white);
+}
+
+/* =========================
+   Utility Classes - Borders
+   ========================= */
+.border-light {
+  border-color: var(--border-light);
+}
+.border-medium {
+  border-color: var(--border-medium);
+}
+
+/* =========================
+   Utility Classes - Shadows
+   ========================= */
+.shadow-sm {
+  box-shadow: var(--shadow-sm);
+}
+.shadow-md {
+  box-shadow: var(--shadow-md);
+}
+.shadow-lg {
+  box-shadow: var(--shadow-lg);
+}
+
+/* =========================
+   Responsive Container
+   ========================= */
+.container-custom {
+  width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+
+@media (min-width: 640px) {
+  .container-custom {
+    max-width: 640px;
+  }
+}
+@media (min-width: 768px) {
+  .container-custom {
+    max-width: 768px;
+  }
+}
+@media (min-width: 1024px) {
+  .container-custom {
+    max-width: 1024px;
+  }
+}
+@media (min-width: 1280px) {
+  .container-custom {
+    max-width: 1280px;
+  }
+}
+@media (min-width: 1536px) {
+  .container-custom {
+    max-width: 1536px;
+  }
+}
+
+/* =========================
+   Animations
+   ========================= */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.animate-fadeIn {
+  animation: fadeIn 0.5s ease-out;
+}
