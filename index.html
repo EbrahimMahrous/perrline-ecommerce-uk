@@ -37,27 +37,87 @@
       content="Pearline connects people in the USA with premium products, competitive prices, and outstanding customer service."
     />
     <meta name="twitter:image" content="/perrline-ecommerce-uk/logoGreen.jpg" />
-    <!-- Fonts (Arabic + English) -->
+
+    <!-- Preconnect to external domains -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&family=Poppins:wght@400;500;600;700&display=swap"
-      rel="stylesheet"
-    />
-    <!-- Global Styles -->
+
+    <!-- Inline critical CSS -->
     <style>
       body {
-        font-family: "Poppins", "Cairo", sans-serif;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+          Helvetica, Arial, sans-serif;
         margin: 0;
         padding: 0;
         background-color: #fff;
         color: #222;
       }
+
+      /* Minimal critical styles for above-the-fold content */
+      .header {
+        padding: 1rem;
+        background: #f8f8f8;
+      }
+
+      /* Fallback fonts until Google Fonts load */
+      .font-loader {
+        font-family: "Poppins", "Cairo", -apple-system, BlinkMacSystemFont,
+          "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      }
     </style>
+
+    <!-- Defer non-critical CSS -->
+    <link
+      rel="preload"
+      href="/assets/index-DbnCQF0w.css"
+      as="style"
+      onload="this.onload=null;this.rel='stylesheet'"
+    />
+    <noscript>
+      <link rel="stylesheet" href="/assets/index-DbnCQF0w.css" />
+    </noscript>
+
+    <!-- Load Google Fonts asynchronously with display=swap -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&family=Poppins:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+      media="print"
+      onload="this.media='all'; this.onload=null;"
+    />
+    <noscript>
+      <link
+        href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&family=Poppins:wght@400;500;600;700&display=swap"
+        rel="stylesheet"
+      />
+    </noscript>
     <script type="module" crossorigin src="/perrline-ecommerce-uk/assets/index-Ct7EBBfl.js"></script>
     <link rel="stylesheet" crossorigin href="/perrline-ecommerce-uk/assets/index-DbnCQF0w.css">
   </head>
   <body>
-    <div id="root"></div>
+    <div id="root">
+      <!-- Basic content that appears immediately -->
+      <div class="header">
+        <h1>Pearline</h1>
+        <p>Premium Products & Service</p>
+      </div>
+    </div>
+
+    <!-- Script to load non-critical resources -->
+    <script>
+      // Function to load CSS dynamically
+      function loadCSS(url) {
+        var link = document.createElement("link");
+        link.rel = "stylesheet";
+        link.href = url;
+        link.media = "all";
+        document.head.appendChild(link);
+      }
+
+      // Load any additional non-critical CSS after page load
+      window.addEventListener("load", function () {
+        // Load any additional stylesheets if needed
+      });
+    </script>
+
   </body>
 </html>
