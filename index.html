@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <!-- Favicon -->
-    <link rel="icon" type="image/jpeg" href="/perrline-ecommerce-uk/logoGreen.jpg" />
+    <link rel="icon" type="image/jpeg" href="/perrline-ecommerce-uk/symbol-P.png" />
     <!-- Viewport -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <!-- Title -->
@@ -23,7 +23,7 @@
       property="og:description"
       content="Discover premium products, competitive prices, and top-notch customer service with Pearline."
     />
-    <meta property="og:image" content="/perrline-ecommerce-uk/logoGreen.jpg" />
+    <meta property="og:image" content="/logoGreen.jpg" />
     <meta property="og:url" content="https://pearline.com" />
     <meta property="og:type" content="website" />
     <!-- Twitter Cards -->
@@ -36,13 +36,12 @@
       name="twitter:description"
       content="Pearline connects people in the USA with premium products, competitive prices, and outstanding customer service."
     />
-    <meta name="twitter:image" content="/perrline-ecommerce-uk/logoGreen.jpg" />
+    <meta name="twitter:image" content="/logoGreen.jpg" />
 
     <!-- Preconnect to external domains -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 
-    <!-- Inline critical CSS -->
     <style>
       body {
         font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
@@ -63,6 +62,85 @@
       .font-loader {
         font-family: "Poppins", "Cairo", -apple-system, BlinkMacSystemFont,
           "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      }
+
+      /* Loader Styles */
+      .loader-container {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(255, 255, 255, 0.9);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 9999;
+        transition: opacity 0.5s ease-out;
+      }
+
+      .loader-container.hidden {
+        opacity: 0;
+        pointer-events: none;
+      }
+
+      .three-d-loader {
+        width: 64px;
+        height: 64px;
+        perspective: 800px;
+      }
+
+      .three-d-loader-inner {
+        position: relative;
+        width: 100%;
+        height: 100%;
+        transform-style: preserve-3d;
+        animation: rotate3d 2s infinite linear;
+      }
+
+      .three-d-loader-face {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(34, 164, 230, 0.5);
+        border: 2px solid #22a4e6;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        opacity: 0.9;
+      }
+
+      .three-d-loader-front {
+        transform: translateZ(32px);
+      }
+
+      .three-d-loader-back {
+        transform: translateZ(-32px) rotateY(180deg);
+      }
+
+      .three-d-loader-right {
+        transform: translateX(32px) rotateY(90deg);
+      }
+
+      .three-d-loader-left {
+        transform: translateX(-32px) rotateY(-90deg);
+      }
+
+      .three-d-loader-top {
+        transform: translateY(-32px) rotateX(90deg);
+      }
+
+      .three-d-loader-bottom {
+        transform: translateY(32px) rotateX(-90deg);
+      }
+
+      @keyframes rotate3d {
+        0% {
+          transform: rotateX(0) rotateY(0) rotateZ(0);
+        }
+        100% {
+          transform: rotateX(360deg) rotateY(360deg) rotateZ(360deg);
+        }
       }
     </style>
 
@@ -90,33 +168,50 @@
         rel="stylesheet"
       />
     </noscript>
-    <script type="module" crossorigin src="/perrline-ecommerce-uk/assets/index-CG-XHgvL.js"></script>
-    <link rel="stylesheet" crossorigin href="/perrline-ecommerce-uk/assets/index-DMUhplXQ.css">
+    <script type="module" crossorigin src="/perrline-ecommerce-uk/assets/index-ShIB2kT2.js"></script>
+    <link rel="stylesheet" crossorigin href="/perrline-ecommerce-uk/assets/index-Dtmq2f1u.css">
   </head>
   <body>
-    <div id="root">
-      <!-- Basic content that appears immediately -->
-      <div class="header">
-        <h1>Pearline</h1>
-        <p>Premium Products & Service</p>
+    <!-- Loader container -->
+    <div class="loader-container" id="loader">
+      <div class="three-d-loader">
+        <div class="three-d-loader-inner">
+          <div class="three-d-loader-face three-d-loader-front"></div>
+          <div class="three-d-loader-face three-d-loader-back"></div>
+          <div class="three-d-loader-face three-d-loader-right"></div>
+          <div class="three-d-loader-face three-d-loader-left"></div>
+          <div class="three-d-loader-face three-d-loader-top"></div>
+          <div class="three-d-loader-face three-d-loader-bottom"></div>
+        </div>
       </div>
     </div>
 
-    <!-- Script to load non-critical resources -->
-    <script>
-      // Function to load CSS dynamically
-      function loadCSS(url) {
-        var link = document.createElement("link");
-        link.rel = "stylesheet";
-        link.href = url;
-        link.media = "all";
-        document.head.appendChild(link);
-      }
+    <div id="root">
+      <!-- Basic content that appears immediately -->
+      <!-- <div class="header">
+        <h1>Pearline</h1>
+        <p>Premium Products & Service</p>
+      </div> -->
+    </div>
 
-      // Load any additional non-critical CSS after page load
-      window.addEventListener("load", function () {
-        // Load any additional stylesheets if needed
+    <!-- Script to handle loader display -->
+    <script>
+      // Show loader when page starts loading
+      window.addEventListener("beforeunload", function () {
+        document.getElementById("loader").classList.remove("hidden");
       });
+
+      // Hide loader when page is fully loaded
+      window.addEventListener("load", function () {
+        setTimeout(function () {
+          document.getElementById("loader").classList.add("hidden");
+        }, 500); // small delay for smoother transition
+      });
+
+      // Also hide loader if page load fails or takes too long
+      setTimeout(function () {
+        document.getElementById("loader").classList.add("hidden");
+      }, 5000); // hide after 5 seconds regardless
     </script>
 
   </body>
