@@ -1,12 +1,9 @@
 import { Globe, Truck, Shield, Clock } from "lucide-react";
+import { useTranslation } from "../../../i18n/TranslationContext";
 
-/**
- * Perrline — GoFurther (Globe Edition)
- * — ألوان بالكامل من :root
- * — SVG كرة أرضية + دوران بطيء + مدن وخطوط اتصال
- * — بدون مكتبات خارجية
- */
 export default function GoFurther() {
+  const { t, language } = useTranslation();
+
   const globalLocations = [
     { name: "New York", x: "25%", y: "35%" },
     { name: "London", x: "48%", y: "28%" },
@@ -23,40 +20,42 @@ export default function GoFurther() {
   const features = [
     {
       icon: <Globe className="w-8 h-8" />,
-      title: "Global Network",
-      description: "Connected to over 80 countries worldwide",
+      title: t("goFurther.features.global.title"),
+      description: t("goFurther.features.global.description"),
     },
     {
       icon: <Truck className="w-8 h-8" />,
-      title: "Fast Shipping",
-      description: "Streamlined freight and shipping process",
+      title: t("goFurther.features.shipping.title"),
+      description: t("goFurther.features.shipping.description"),
     },
     {
       icon: <Shield className="w-8 h-8" />,
-      title: "Secure Trading",
-      description: "Safe and reliable international transactions",
+      title: t("goFurther.features.trading.title"),
+      description: t("goFurther.features.trading.description"),
     },
     {
       icon: <Clock className="w-8 h-8" />,
-      title: "24/7 Support",
-      description: "Round-the-clock customer assistance",
+      title: t("goFurther.features.support.title"),
+      description: t("goFurther.features.support.description"),
     },
   ];
 
-  // أدوات مساعدة للـ SVG (نسبة مئوية -> رقم 0..100)
   const p = (v: string) => parseFloat(v);
   const cairo = globalLocations.find((l) => l.name === "Cairo")!;
   const cityLinks = globalLocations.filter((l) => l.name !== "Cairo");
 
-  // مسار منحنى بسيط بين نقطتين (x1,y1) و (x2,y2) مع انحناءة خفيفة
-  const makeCurve = (x1: number, y1: number, x2: number, y2: number, bend = 12) => {
+  const makeCurve = (
+    x1: number,
+    y1: number,
+    x2: number,
+    y2: number,
+    bend = 12
+  ) => {
     const mx = (x1 + x2) / 2;
     const my = (y1 + y2) / 2;
-    // اتجاه الانحناء يعتمد على موقع النقاط لنعطي إيحاء “عبر القارات”
     const dx = x2 - x1;
     const dy = y2 - y1;
     const len = Math.max(Math.hypot(dx, dy), 1);
-    // متجه عمودي للوصول لنقطة تحكم Q
     const nx = (-dy / len) * bend;
     const ny = (dx / len) * bend;
     const cx = mx + nx;
@@ -65,8 +64,11 @@ export default function GoFurther() {
   };
 
   return (
-    <section className="py-20 bg-[var(--bg-secondary)] text-[var(--text-primary)] overflow-hidden">
-      {/* keyframes + helpers محلياً */}
+    <section
+      className="py-20 bg-[var(--bg-secondary)] text-[var(--color-primary)] overflow-hidden"
+      dir={language === "ar" ? "rtl" : "ltr"}
+    >
+      {/* keyframes + helpers */}
       <style>{`
         @keyframes spin-slow { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
         .animate-spin-slow { animation: spin-slow 30s linear infinite; }
@@ -77,43 +79,61 @@ export default function GoFurther() {
         <div className="grid lg:grid-cols-2 gap-12 items-center">
           {/* Left — Globe */}
           <div className="relative">
-            <div className="relative rounded-3xl p-8 backdrop-blur-sm shine-border border border-[var(--border-light)] bg-gradient-to-br from-[var(--accent-cream)] via-[var(--primary-gold-light)]/40 to-[var(--accent-blue)]/20">
+            <div className="relative rounded-3xl p-8 backdrop-blur-sm shine-border border border-[var(--border-light)] bg-gradient-to-br from-[var(--color-accent-2)] via-[var(--color-primary-light)]/40 to-[var(--color-accent-3)]/20">
               <div className="relative w-full h-96 rounded-2xl overflow-hidden">
-                {/* إطار ووسم */}
-                <div className="absolute -top-4 -right-4 bg-[var(--primary-gold)] text-[var(--text-white)] px-4 py-2 rounded-full text-sm font-semibold shadow-lg">
-                  80+ Countries
-                </div>
-                <div className="absolute -bottom-4 -left-4 bg-[var(--accent-blue)] text-[var(--text-white)] px-4 py-2 rounded-full text-sm font-semibold shadow-lg">
-                  Perrline Global
-                </div>
-
-                {/* كرة الأرضية */}
+                {/* Earth*/}
                 <svg
                   viewBox="0 0 100 100"
                   className="absolute inset-0 w-full h-full"
                   aria-hidden
                 >
-                  {/* السماء/المحيط */}
                   <defs>
                     <radialGradient id="ocean" cx="50%" cy="45%" r="60%">
-                      <stop offset="0%" stopColor="var(--accent-blue)" stopOpacity="1" />
-                      <stop offset="100%" stopColor="var(--accent-blue)" stopOpacity="0.9" />
+                      <stop
+                        offset="0%"
+                        stopColor="var(--color-accent-3)"
+                        stopOpacity="1"
+                      />
+                      <stop
+                        offset="100%"
+                        stopColor="var(--color-accent-3)"
+                        stopOpacity="0.9"
+                      />
                     </radialGradient>
                     <linearGradient id="meridian" x1="0" x2="0" y1="0" y2="1">
-                      <stop offset="0%" stopColor="var(--primary-gold-light)" stopOpacity="0.0" />
-                      <stop offset="50%" stopColor="var(--primary-gold-light)" stopOpacity="0.35" />
-                      <stop offset="100%" stopColor="var(--primary-gold-light)" stopOpacity="0.0" />
+                      <stop
+                        offset="0%"
+                        stopColor="var(--color-primary-light)"
+                        stopOpacity="0.0"
+                      />
+                      <stop
+                        offset="50%"
+                        stopColor="var(--color-primary-light)"
+                        stopOpacity="0.35"
+                      />
+                      <stop
+                        offset="100%"
+                        stopColor="var(--color-primary-light)"
+                        stopOpacity="0.0"
+                      />
                     </linearGradient>
                   </defs>
-
-                  {/* القرص الأساسي */}
+                  {/* Primary disk*/}
                   <g transform="translate(50,50)">
-                    <circle r="48" fill="url(#ocean)" className="animate-spin-slow origin-center" />
-
-                    {/* خطوط الطول/العرض الذهبية الخفيفة */}
+                    <circle
+                      r="36"
+                      fill="url(#ocean)"
+                      className="animate-spin-slow origin-center"
+                    />
+                    {/* Line Gold */}
                     {Array.from({ length: 6 }).map((_, i) => (
                       <g key={`lat-${i}`} opacity="0.18">
-                        <circle r={38 - i * 5} fill="none" stroke="url(#meridian)" strokeWidth="0.4" />
+                        <circle
+                          r={38 - i * 5}
+                          fill="none"
+                          stroke="url(#meridian)"
+                          strokeWidth="0.4"
+                        />
                       </g>
                     ))}
                     {Array.from({ length: 8 }).map((_, i) => (
@@ -122,30 +142,16 @@ export default function GoFurther() {
                         transform={`rotate(${(i * 180) / 8})`}
                         opacity="0.18"
                       >
-                        <ellipse rx="0.01" ry="45" fill="none" stroke="url(#meridian)" strokeWidth="0.5" />
+                        <ellipse
+                          rx="0.01"
+                          ry="45"
+                          fill="none"
+                          stroke="url(#meridian)"
+                          strokeWidth="0.5"
+                        />
                       </g>
                     ))}
-
-                    {/* كتل قارات مبسطة (blobs) بلون أخضر زيتوني */}
-                    <g className="animate-spin-slow origin-center" opacity="0.85">
-                      <path
-                        d="M-25,-5 C-5,-18 10,-10 25,-8 C35,-6 40,5 35,15 C28,25 10,28 -5,25 C-22,22 -35,10 -25,-5 Z"
-                        fill="var(--accent-green)"
-                      />
-                      <path
-                        d="M-15,-28 C-5,-32 10,-30 18,-26 C24,-22 26,-14 18,-10 C10,-6 -2,-8 -10,-12 C-18,-16 -23,-22 -15,-28 Z"
-                        fill="var(--accent-green)"
-                        opacity="0.9"
-                      />
-                      <path
-                        d="M10,18 C20,14 30,16 36,20 C42,24 44,30 40,34 C36,38 26,38 18,34 C12,31 6,25 10,18 Z"
-                        fill="var(--accent-green)"
-                        opacity="0.9"
-                      />
-                    </g>
                   </g>
-
-                  {/* خطوط الاتصال: Cairo -> باقي المدن (viewBox 0..100) */}
                   <g opacity="0.7">
                     {cityLinks.map((city, idx) => {
                       const x1 = p(city.x);
@@ -158,7 +164,7 @@ export default function GoFurther() {
                           key={`ln-${city.name}`}
                           d={d}
                           fill="none"
-                          stroke="var(--primary-gold-light)"
+                          stroke="var(--color-primary-light)"
                           strokeWidth="0.6"
                           strokeLinecap="round"
                           strokeDasharray="2 2"
@@ -167,8 +173,7 @@ export default function GoFurther() {
                     })}
                   </g>
                 </svg>
-
-                {/* Pins المدن (متموضعة بالنسبة المئوية) */}
+                {/* Pins [cities]*/}
                 <div className="absolute inset-0">
                   {globalLocations.map((loc, i) => (
                     <div
@@ -177,11 +182,12 @@ export default function GoFurther() {
                       style={{ left: loc.x, top: loc.y }}
                     >
                       <div className="relative">
-                        <div className="w-3.5 h-3.5 rounded-full bg-[var(--primary-gold)] ring-2 ring-[var(--accent-cream)] shadow"
+                        <div
+                          className="w-3.5 h-3.5 rounded-full bg-[var(--color-primary)] ring-2 ring-[var(--color-accent-2)] shadow"
                           title={loc.name}
                         />
-                        <div className="absolute inset-0 rounded-full animate-ping bg-[var(--primary-gold)]/25" />
-                        <div className="absolute bottom-6 left-1/2 -translate-x-1/2 bg-[var(--accent-brown)] text-[var(--text-white)] text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">
+                        <div className="absolute inset-0 rounded-full animate-ping bg-[var(--color-primary)]/25" />
+                        <div className="absolute bottom-6 left-1/2 -translate-x-1/2 bg-[var(--color-accent-1)] text-[var(--text-white)] text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">
                           {loc.name}
                         </div>
                       </div>
@@ -191,33 +197,26 @@ export default function GoFurther() {
               </div>
             </div>
           </div>
-
           {/* Right — Content */}
           <div className="space-y-8">
             <div>
-              <div className="inline-block bg-[var(--primary-gold-light)]/20 text-[var(--accent-brown)] px-4 py-2 rounded-full text-sm font-semibold mb-4 border border-[var(--primary-gold-light)]/50">
-                We Go Further — Perrline
+              <div className="inline-block bg-[var(--color-accent-2)] text-[var(--color-accent-1)] px-4 py-2 rounded-full text-sm font-semibold mb-4 border border-[var(--color-accent-2)]">
+                {t("goFurther.badge")}
               </div>
-              <h2 className="text-4xl lg:text-5xl font-bold mb-6 leading-tight text-[var(--text-primary)]">
-                Your Global Wholesale{" "}
-                <span className="text-transparent bg-clip-text bg-gradient-to-r from-[var(--primary-gold)] to-[var(--accent-brown)]">
-                  Partner
+              <h2 className="text-4xl lg:text-5xl font-bold mb-6 leading-tight text-[var(--color-primary)]">
+                {t("goFurther.title.line1")}{" "}
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-[var(--color-primary)] to-[var(--color-accent-1)]">
+                  {t("goFurther.title.line2")}
                 </span>
               </h2>
               <div className="space-y-4 text-lg text-[var(--text-secondary)] leading-relaxed">
                 <p>
-                  Across oceans, land and sky, <strong>Perrline</strong> connects
-                  people with products in over 80 countries worldwide—powering your
-                  growth with a dependable global network.
+                  {t("goFurther.description.line1")} <strong>Pearline</strong>{" "}
+                  {t("goFurther.description.line2")}
                 </p>
-                <p>
-                  Our experienced team streamlines freight and shipping, guiding you
-                  past common pitfalls of domestic and international exporting with
-                  secure, on-time delivery.
-                </p>
+                <p>{t("goFurther.description.line3")}</p>
               </div>
             </div>
-
             {/* Features */}
             <div className="grid grid-cols-2 gap-6">
               {features.map((feature, index) => (
@@ -225,23 +224,17 @@ export default function GoFurther() {
                   key={index}
                   className="rounded-xl p-6 border bg-[var(--bg-primary)]/70 border-[var(--border-light)] hover:shadow-lg transition-all duration-300 group"
                 >
-                  <div className="mb-3 text-[var(--primary-gold)] group-hover:scale-110 transition-transform duration-300">
+                  <div className="mb-3 text-[var(--color-primary)] group-hover:scale-110 transition-transform duration-300">
                     {feature.icon}
                   </div>
-                  <h3 className="font-semibold mb-2 text-[var(--text-primary)]">
+                  <h3 className="font-semibold mb-2 text-[var(--color-primary)]">
                     {feature.title}
                   </h3>
-                  <p className="text-sm text-[var(--text-muted)]">{feature.description}</p>
+                  <p className="text-sm text-[var(--text-muted)]">
+                    {feature.description}
+                  </p>
                 </div>
               ))}
-            </div>
-
-            {/* CTA */}
-            <div className="pt-4">
-              <button className="bg-gradient-to-r from-[var(--primary-gold)] to-[var(--primary-gold-dark)] hover:brightness-110 text-[var(--text-white)] px-8 py-4 rounded-xl font-semibold text-lg transition-transform duration-300 hover:scale-105 shadow-xl flex items-center gap-3">
-                <span>Explore Perrline Network</span>
-                <Globe className="w-5 h-5" />
-              </button>
             </div>
           </div>
         </div>

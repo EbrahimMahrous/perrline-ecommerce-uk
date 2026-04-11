@@ -1,110 +1,157 @@
-import {
-  Globe,
-  TrendingUp,
-  Users,
-  Award,
-  CheckCircle,
-} from "lucide-react";
+import { useEffect, useState } from "react";
+import { Globe, TrendingUp, Award, CheckCircle } from "lucide-react";
+import { motion } from "framer-motion";
+import { useTranslation } from "../../../i18n/TranslationContext";
 
 export default function Wholesaler() {
+  const { t, language } = useTranslation();
+  const [, setCount] = useState(0);
+  useEffect(() => {
+    let start = 0;
+    const end = 1000;
+    const duration = 2000;
+    const stepTime = Math.abs(Math.floor(duration / end));
+
+    const timer = setInterval(() => {
+      start += 10;
+      setCount((prev) => (prev < end ? prev + 10 : end));
+      if (start >= end) clearInterval(timer);
+    }, stepTime);
+
+    return () => clearInterval(timer);
+  }, []);
+
   return (
-    <section className="py-20 bg-[var(--bg-secondary)]">
-      <div className="container mx-auto px-4">
+    <section
+      className="py-20 w-[90%] m-auto"
+      dir={language === "ar" ? "rtl" : "ltr"}
+    >
+      <div className="container-custom">
         <div className="grid lg:grid-cols-2 gap-16 items-center">
           {/* Left Content */}
           <div className="space-y-8">
             <div className="space-y-6">
-              <h1 className="text-4xl lg:text-5xl font-bold text-[var(--text-primary)] leading-tight">
-                Your Reliable Partner in{" "}
-                <span className="text-[var(--primary-gold)]">Global Wholesale</span>
-              </h1>
+              <motion.h1
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5 }}
+                className="text-4xl lg:text-5xl font-bold text-[var(--color-primary)] leading-tight"
+              >
+                {t("wholesaler.title.line1")}{" "}
+                <span className="text-accent-4">
+                  {t("wholesaler.title.line2")}
+                </span>
+              </motion.h1>
 
-              <h2 className="text-xl lg:text-2xl text-[var(--text-secondary)] font-medium">
-                Supplying Leading FMCG, Beauty, and Food & Beverage Brands
-                Worldwide
-              </h2>
+              <motion.h2
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: 0.1 }}
+                className="text-xl lg:text-2xl text-secondary font-medium"
+              >
+                {t("wholesaler.subtitle")}
+              </motion.h2>
 
-              <p className="text-lg text-[var(--text-muted)] leading-relaxed">
-                At PERRKINE Wholesale, we connect retailers, distributors, and
-                suppliers to an extensive portfolio of high-quality products
-                from the world's most reputable manufacturers. We offer
-                competitive prices, efficient logistics, and exceptional
-                customer support to help your business grow.
-              </p>
+              <motion.p
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: 0.2 }}
+                className="text-lg text-muted leading-relaxed"
+              >
+                {t("wholesaler.description")}
+              </motion.p>
             </div>
 
             {/* Features List */}
-            <div className="grid sm:grid-cols-2 gap-4">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.3 }}
+              className="grid sm:grid-cols-2 gap-4"
+            >
               {[
-                "Competitive wholesale prices",
-                "Efficient global logistics",
-                "Exceptional customer support",
-                "Extensive product portfolio",
+                t("wholesaler.features.competitive"),
+                t("wholesaler.features.logistics"),
+                t("wholesaler.features.support"),
+                t("wholesaler.features.portfolio"),
               ].map((text) => (
                 <div key={text} className="flex items-center space-x-3">
                   <CheckCircle
-                    className="text-[var(--primary-gold)] flex-shrink-0"
+                    className="text-accent-4 flex-shrink-0"
                     size={24}
                   />
-                  <span className="text-[var(--text-primary)]">{text}</span>
+                  <span className="text-primary">{text}</span>
                 </div>
               ))}
-            </div>
-
-            <button className="bg-[var(--primary-gold)] hover:bg-[var(--primary-gold-dark)] text-white px-8 py-4 rounded-lg font-semibold text-lg transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105">
-              Start Partnership
-            </button>
+            </motion.div>
           </div>
 
           {/* Right Content */}
-          <div className="relative">
-            <div className="grid grid-cols-2 gap-4">
-              {/* Large Card */}
-              <div className="col-span-2 relative overflow-hidden rounded-2xl shadow-xl border border-[var(--border-light)]">
-                <div className="h-64 bg-gradient-to-br from-[var(--accent-blue)] to-[var(--primary-gold)] flex items-center justify-center">
-                  <div className="text-center text-white">
-                    <Globe size={48} className="mx-auto mb-4" />
-                    <h3 className="text-xl font-bold">Global Network</h3>
-                    <p className="text-sm opacity-90">Worldwide Distribution</p>
+          <div className="p-6">
+            <div className="relative max-w-5xl mx-auto">
+              <div className="grid grid-cols-2 gap-4">
+                {/* Large Card */}
+                <motion.div
+                  initial={{ opacity: 0, y: 40 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.6 }}
+                  className="col-span-2 relative overflow-hidden rounded-2xl shadow-lg border border-light"
+                >
+                  <div className="h-64 bg-accent-4 flex items-center justify-center">
+                    <motion.div
+                      transition={{
+                        repeat: Infinity,
+                        duration: 20,
+                        ease: "linear",
+                      }}
+                      className="text-center text-white"
+                    >
+                      <Globe size={48} className="mx-auto mb-4" />
+                      <h3 className="text-xl font-bold">
+                        {t("wholesaler.cards.global.title")}
+                      </h3>
+                      <p className="text-sm opacity-90">
+                        {t("wholesaler.cards.global.subtitle")}
+                      </p>
+                    </motion.div>
                   </div>
-                </div>
-              </div>
+                </motion.div>
 
-              {/* Small Card 1 */}
-              <div className="relative overflow-hidden rounded-xl shadow-lg border border-[var(--border-light)]">
-                <div className="h-32 bg-gradient-to-br from-[var(--accent-green)] to-[var(--primary-gold)] flex items-center justify-center">
-                  <div className="text-center text-white">
-                    <TrendingUp size={32} className="mx-auto mb-2" />
-                    <h4 className="font-semibold">Growth</h4>
+                {/* Small Card 1 */}
+                <motion.div
+                  initial={{ opacity: 0, x: -40 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: 0.2, duration: 0.6 }}
+                  whileHover={{ scale: 1.05 }}
+                  className="relative overflow-hidden rounded-xl shadow-md border border-light"
+                >
+                  <div className="h-32 bg-accent-3 flex items-center justify-center">
+                    <div className="text-center text-white">
+                      <TrendingUp size={32} className="mx-auto mb-2" />
+                      <h4 className="font-semibold">
+                        {t("wholesaler.cards.growth.title")}
+                      </h4>
+                    </div>
                   </div>
-                </div>
-              </div>
+                </motion.div>
 
-              {/* Small Card 2 */}
-              <div className="relative overflow-hidden rounded-xl shadow-lg border border-[var(--border-light)]">
-                <div className="h-32 bg-gradient-to-br from-[var(--accent-brown)] to-[var(--primary-gold-dark)] flex items-center justify-center">
-                  <div className="text-center text-white">
-                    <Award size={32} className="mx-auto mb-2" />
-                    <h4 className="font-semibold">Quality</h4>
+                {/* Small Card 2 */}
+                <motion.div
+                  initial={{ opacity: 0, x: 40 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: 0.3, duration: 0.6 }}
+                  whileHover={{ scale: 1.05 }}
+                  className="relative overflow-hidden rounded-xl shadow-md border border-light"
+                >
+                  <div className="h-32 bg-accent-1 flex items-center justify-center">
+                    <div className="text-center text-white">
+                      <Award size={32} className="mx-auto mb-2" />
+                      <h4 className="font-semibold">
+                        {t("wholesaler.cards.quality.title")}
+                      </h4>
+                    </div>
                   </div>
-                </div>
-              </div>
-            </div>
-
-            {/* Floating Stats */}
-            <div className="absolute -bottom-6 -left-6 bg-white rounded-xl shadow-xl p-4 border border-[var(--border-light)]">
-              <div className="flex items-center space-x-3">
-                <div className="bg-[var(--primary-gold-light)] p-2 rounded-lg">
-                  <Users className="text-[var(--accent-brown)]" size={24} />
-                </div>
-                <div>
-                  <div className="text-2xl font-bold text-[var(--text-primary)]">
-                    1000+
-                  </div>
-                  <div className="text-sm text-[var(--text-secondary)]">
-                    Happy Clients
-                  </div>
-                </div>
+                </motion.div>
               </div>
             </div>
           </div>

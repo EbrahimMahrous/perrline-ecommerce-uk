@@ -1,22 +1,18 @@
 import { useState, useEffect } from "react";
-import {
-  ChevronLeft,
-  ChevronRight,
-  ShoppingBag,
-  Truck,
-  Star,
-  Users,
-  Package,
-} from "lucide-react";
-// ** Assets
-import perrlineBanner from "../../../assets/perrline-banner.png";
-import dealsBanner from "../../../assets/deals-banner.png";
-import premiumBanner from "../../../assets/premium-banner.png";
-import deliveryBanner from "../../../assets/delivery-banner.png";
+import { ChevronLeft, ChevronRight, ArrowRight } from "lucide-react";
+import logo from "../../../assets/p-white.png";
+import trustedPartnerBanner from "../../../assets/banner1.jpg";
+// import lorealBanner from "../../../assets/banner2.jpg";
+// import globalPartnerBanner from "../../../assets/banner3.jpg";
+import premiumBrandsBanner from "../../../assets/banner4.jpg";
+import { useTranslation } from "../../../i18n/TranslationContext";
+import { Link } from "react-router-dom";
 
 interface CarouselSlide {
   id: number;
   title: string;
+  subTitle?: string;
+  subSubTitle?: string;
   description: string;
   buttonText: string;
   buttonLink: string;
@@ -24,61 +20,49 @@ interface CarouselSlide {
   icon: React.ReactNode;
 }
 
-const slides: CarouselSlide[] = [
-  {
-    id: 1,
-    title: "Premium Wholesale Products",
-    description:
-      "Discover thousands of high-quality products from trusted brands. Get the best wholesale prices for your business.",
-    buttonText: "Shop Now",
-    buttonLink: "/products",
-    backgroundImage: `url('${premiumBanner}')`,
-    icon: <ShoppingBag size={48} />,
-  },
-  {
-    id: 2,
-    title: "Fast & Free UK Delivery",
-    description:
-      "Enjoy free delivery across the UK on orders over £600. Fast, reliable shipping to get your products when you need them.",
-    buttonText: "Learn More",
-    buttonLink: "/delivery",
-    backgroundImage: `url('${deliveryBanner}')`,
-    icon: <Truck size={48} />,
-  },
-  // {
-  //   id: 3,
-  //   title: "Top Rated by Customers",
-  //   description:
-  //     "Join thousands of satisfied customers who trust us for their wholesale needs. 5-star rated service and support.",
-  //   buttonText: "Read Reviews",
-  //   buttonLink: "/reviews",
-  //   backgroundImage:
-  //     "url('https://images.unsplash.com/photo-1573497019940-1c28c88b4f3b')",
-  //   icon: <Star size={48} />,
-  // },
-  {
-    id: 4,
-    title: "Perrline",
-    description:
-      "Your trusted partner in cleaning and home care products. From effective powder to wet wipes, we deliver quality that lasts.",
-    buttonText: "Explore Perrline products now",
-    buttonLink: "/community",
-    backgroundImage: `url('${perrlineBanner}')`,
-    icon: <Users size={48} />,
-  },
-  {
-    id: 5,
-    title: "Bulk Orders & Special Deals",
-    description:
-      "Get exclusive discounts on bulk orders. Special pricing for large quantities and regular customers.",
-    buttonText: "Get Quote",
-    buttonLink: "/bulk-orders",
-    backgroundImage: `url('${dealsBanner}')`,
-    icon: <Package size={48} />,
-  },
-];
-
 export default function HomeCarousel() {
+  const { t, isRTL } = useTranslation();
+  const slides: CarouselSlide[] = [
+    {
+      id: 1,
+      title: t("carousel.trustedPartner.title"),
+      description: t("carousel.trustedPartner.description"),
+      buttonText: t("carousel.trustedPartner.buttonText"),
+      buttonLink: "/all-products",
+      backgroundImage: `url('${trustedPartnerBanner}')`,
+      icon: <img src={logo} alt="Logo" className="w-24 h-24" />,
+    },
+    // {
+    //   id: 2,
+    //   title: t("carousel.loreal.title"),
+    //   subTitle: t("carousel.loreal.subTitle"),
+    //   subSubTitle: t("carousel.loreal.subSubTitle"),
+    //   description: t("carousel.loreal.description"),
+    //   buttonText: t("carousel.loreal.buttonText"),
+    //   buttonLink: "/all-products",
+    //   backgroundImage: `url('${lorealBanner}')`,
+    //   icon: "",
+    // },
+    // {
+    //   id: 3,
+    //   title: t("carousel.globalPartner.title"),
+    //   description: t("carousel.globalPartner.description"),
+    //   buttonText: t("carousel.globalPartner.buttonText"),
+    //   buttonLink: "/",
+    //   backgroundImage: `url('${globalPartnerBanner}')`,
+    //   icon: <img src={logo} alt="Logo" className="w-24 h-24" />,
+    // },
+    {
+      id: 4,
+      title: t("carousel.premiumBrands.title"),
+      description: t("carousel.premiumBrands.description"),
+      buttonText: t("carousel.premiumBrands.buttonText"),
+      buttonLink: "/all-products",
+      backgroundImage: `url('${premiumBrandsBanner}')`,
+      icon: "",
+    },
+  ];
+
   const [currentSlide, setCurrentSlide] = useState(0);
   const [isAutoPlaying, setIsAutoPlaying] = useState(true);
 
@@ -86,9 +70,9 @@ export default function HomeCarousel() {
     if (!isAutoPlaying) return;
     const interval = setInterval(() => {
       setCurrentSlide((prev) => (prev + 1) % slides.length);
-    }, 5000);
+    }, 2000);
     return () => clearInterval(interval);
-  }, [isAutoPlaying]);
+  }, [isAutoPlaying, slides.length]);
 
   const nextSlide = () => setCurrentSlide((prev) => (prev + 1) % slides.length);
   const prevSlide = () =>
@@ -96,7 +80,10 @@ export default function HomeCarousel() {
   const goToSlide = (index: number) => setCurrentSlide(index);
 
   return (
-    <section className="relative h-[68vh] overflow-hidden">
+    <section
+      className="relative h-[68vh] overflow-hidden"
+      dir={isRTL ? "rtl" : "ltr"}
+    >
       {/* Slides */}
       <div className="relative w-full h-full">
         {slides.map((slide, index) => (
@@ -111,62 +98,91 @@ export default function HomeCarousel() {
               backgroundPosition: "center",
             }}
           >
-            {/* Overlay */}
-            <div className="absolute inset-0 bg-black bg-opacity-40"></div>
-
             <div className="relative z-10 h-full flex items-center justify-center">
-              <div className="container mx-auto px-4 text-center text-white">
-                <div className="max-w-4xl mx-auto">
+              <div
+                className={`container mx-auto px-4 text-white ${
+                  isRTL ? "text-right" : "text-left"
+                }`}
+              >
+                <div className="max-w-4xl">
                   {/* Icon */}
-                  <div className="mb-6 flex justify-center">
-                    <div className="p-4 bg-white bg-opacity-20 rounded-full backdrop-blur-sm">
-                      {slide.icon}
-                    </div>
+                  <div
+                    className={`mb-2 flex ${
+                      isRTL ? "justify-end" : "justify-start"
+                    }`}
+                  >
+                    <div className="rounded-lg">{slide.icon}</div>
                   </div>
-
                   {/* Title */}
-                  <h1 className="text-4xl md:text-6xl font-bold mb-6 leading-tight drop-shadow-lg">
+                  <h1 className="text-4xl md:text-6xl font-bold mb-4 leading-tight text-white drop-shadow-xl">
                     {slide.title}
                   </h1>
-
-                  {/* Description */}
-                  <p className="text-lg md:text-xl mb-8 leading-relaxed max-w-2xl mx-auto opacity-95 drop-shadow-md">
-                    {slide.description}
-                  </p>
-
+                  {/* subTitle */}
+                  {slide.subTitle && (
+                    <h2 className="text-4xl md:text-6xl font-bold mb-3 leading-snug text-[rgb(69,28,22)] drop-shadow-md">
+                      {slide.subTitle}
+                    </h2>
+                  )}
+                  {/* subSubTitle */}
+                  {slide.subSubTitle && (
+                    <p className="mb:8 text-lg md:text-2xl font-bold leading-relaxed text-[rgba(69,28,22,0.83)] drop-shadow-sm">
+                      {slide.subSubTitle}
+                    </p>
+                  )}
+                  {/* Description - Conditionally rendered */}
+                  {slide.description && (
+                    <p className="text-lg md:text-xl mb-8 leading-relaxed max-w-2xl opacity-95 drop-shadow-md">
+                      {slide.description}
+                    </p>
+                  )}
                   {/* Button */}
-                  <a
-                    href={slide.buttonLink}
-                    className="inline-block bg-white text-black px-8 py-4 rounded-lg font-semibold text-lg hover:bg-gray-100 transition-colors duration-300 shadow-lg hover:shadow-xl transform hover:scale-105"
+                  <Link
+                    to={slide.buttonLink}
+                    className={`group inline-flex items-center gap-2 bg-white text-[var(--color-primary)] px-8 py-4 rounded-lg font-semibold text-lg hover:bg-[var(--color-primary)] hover:text-white transition-all duration-300 shadow-lg hover:shadow-xl ${
+                      isRTL ? "flex-row-reverse" : ""
+                    }`}
                   >
-                    {slide.buttonText}
-                  </a>
+                    <span>{slide.buttonText}</span>
+                    <ArrowRight
+                      size={20}
+                      className={`transition-transform duration-300 ${
+                        isRTL ? "rotate-180" : ""
+                      } ${
+                        isRTL
+                          ? "group-hover:-translate-x-1"
+                          : "group-hover:translate-x-1"
+                      }`}
+                    />
+                  </Link>
                 </div>
               </div>
             </div>
           </div>
         ))}
       </div>
-
       {/* Navigation Arrows */}
       <button
-        onClick={prevSlide}
+        onClick={isRTL ? nextSlide : prevSlide}
         onMouseEnter={() => setIsAutoPlaying(false)}
         onMouseLeave={() => setIsAutoPlaying(true)}
-        className="absolute left-4 top-1/2 transform -translate-y-1/2 z-20 bg-white bg-opacity-20 hover:bg-opacity-30 text-white p-3 rounded-full backdrop-blur-sm transition-all duration-300 hover:scale-110"
+        className={`absolute top-1/2 transform -translate-y-1/2 z-20 bg-white bg-opacity-80 hover:bg-opacity-100 text-[var(--color-primary)] p-3 rounded-full backdrop-blur-sm transition-all duration-300 hover:scale-110 ${
+          isRTL ? "right-4" : "left-4"
+        }`}
+        aria-label={isRTL ? "Next slide" : "Previous slide"}
       >
-        <ChevronLeft size={24} />
+        <ChevronLeft size={24} className={isRTL ? "rotate-180" : ""} />
       </button>
-
       <button
-        onClick={nextSlide}
+        onClick={isRTL ? prevSlide : nextSlide}
         onMouseEnter={() => setIsAutoPlaying(false)}
         onMouseLeave={() => setIsAutoPlaying(true)}
-        className="absolute right-4 top-1/2 transform -translate-y-1/2 z-20 bg-white bg-opacity-20 hover:bg-opacity-30 text-white p-3 rounded-full backdrop-blur-sm transition-all duration-300 hover:scale-110"
+        className={`absolute top-1/2 transform -translate-y-1/2 z-20 bg-white bg-opacity-80 hover:bg-opacity-100 text-[var(--color-primary)] p-3 rounded-full backdrop-blur-sm transition-all duration-300 hover:scale-110 ${
+          isRTL ? "left-4" : "right-4"
+        }`}
+        aria-label={isRTL ? "Previous slide" : "Next slide"}
       >
-        <ChevronRight size={24} />
+        <ChevronRight size={24} className={isRTL ? "rotate-180" : ""} />
       </button>
-
       {/* Dots */}
       <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 z-20 flex space-x-3">
         {slides.map((_, index) => (
@@ -180,26 +196,10 @@ export default function HomeCarousel() {
                 ? "bg-white scale-125"
                 : "bg-white bg-opacity-50 hover:bg-opacity-75"
             }`}
+            aria-label={`Go to slide ${index + 1}`}
           />
         ))}
       </div>
-
-      {/* Pause/Play Button */}
-      <button
-        onClick={() => setIsAutoPlaying(!isAutoPlaying)}
-        className="absolute top-4 right-4 z-20 bg-white bg-opacity-20 hover:bg-opacity-30 text-white p-2 rounded-full backdrop-blur-sm transition-all duration-300"
-      >
-        {isAutoPlaying ? (
-          <div className="w-4 h-4 flex space-x-1">
-            <div className="w-1 h-4 bg-white"></div>
-            <div className="w-1 h-4 bg-white"></div>
-          </div>
-        ) : (
-          <div className="w-4 h-4 relative">
-            <div className="absolute inset-0 border-l-4 border-l-white border-y-2 border-y-transparent border-r-0"></div>
-          </div>
-        )}
-      </button>
     </section>
   );
 }

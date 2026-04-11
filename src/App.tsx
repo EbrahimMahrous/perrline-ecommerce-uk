@@ -1,5 +1,4 @@
 import Routers from "./routers";
-
 function App() {
   return (
     <>
@@ -7,5 +6,4 @@ function App() {
     </>
   );
 }
-
 export default App;

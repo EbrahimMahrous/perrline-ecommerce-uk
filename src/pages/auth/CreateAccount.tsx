@@ -1,6 +1,20 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import Footer from "../../components/Footer";
 import Navbar from "../../components/Navbar";
+import InputField from "../../components/InputField";
+import { useTranslation } from "../../i18n/TranslationContext";
+import { useAuth } from "../../context/AuthContext";
+import {
+  User,
+  Mail,
+  Lock,
+  Phone,
+  Building,
+  Globe,
+  MapPin,
+  CreditCard,
+} from "lucide-react";
 
 type FormDataKeys =
   | "firstName"
@@ -8,14 +22,20 @@ type FormDataKeys =
   | "email"
   | "password"
   | "confirmPassword"
-  | "mobile"
+  | "mobileNumber"
   | "companyName"
+  | "companyWebsite"
   | "phoneNumber"
+  | "vatNumber"
   | "streetAddress"
-  | "city";
+  | "city"
+  | "country"
+  | "state"
+  | "zipCode"
+  | "terms";
 
 type FormDataType = {
-  [key in FormDataKeys]: string;
+  [key in FormDataKeys]: string | boolean;
 };
 
 type ErrorsType = Partial<Record<FormDataKeys, string>>;
@@ -27,241 +47,446 @@ export default function CreateAccount() {
     email: "",
     password: "",
     confirmPassword: "",
-    mobile: "",
+    mobileNumber: "",
     companyName: "",
+    companyWebsite: "",
     phoneNumber: "",
+    vatNumber: "",
     streetAddress: "",
     city: "",
+    country: "",
+    state: "",
+    zipCode: "",
+    terms: false,
   });
-
   const [errors, setErrors] = useState<ErrorsType>({});
   const [showPassword, setShowPassword] = useState(false);
+  const { t, isRTL } = useTranslation();
+  const { register, countries, loading, error, clearError } = useAuth();
+  const navigate = useNavigate();
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  useEffect(() => {
+    if (error) {
+      alert(error);
+      clearError();
+    }
+  }, [error, clearError]);
+
+  const handleInputChange = (
+    e: React.ChangeEvent<
+      HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
+    >
+  ) => {
+    const target = e.target as HTMLInputElement;
+    const { name, value, type } = target;
+    const newValue = type === "checkbox" ? target.checked : value;
     setFormData({
       ...formData,
-      [e.target.name as FormDataKeys]: e.target.value,
+      [name as FormDataKeys]: newValue,
     });
+    if (errors[name as FormDataKeys]) {
+      setErrors((prev) => ({
+        ...prev,
+        [name]: "",
+      }));
+    }
   };
-
   const getPasswordStrength = (
     password: string
   ): { text: string; color: string } => {
-    if (!password) return { text: "No Password", color: "bg-black" };
+    if (!password)
+      return {
+        text: t("register.passwordStrength.none"),
+        color: "bg-gray-300",
+      };
     let strength = 0;
     if (password.length >= 8) strength++;
     if (/[A-Z]/.test(password)) strength++;
     if (/[0-9]/.test(password)) strength++;
     if (/[^A-Za-z0-9]/.test(password)) strength++;
 
-    if (strength <= 1) return { text: "Weak", color: "bg-red-500" };
-    if (strength === 2) return { text: "Medium", color: "bg-yellow-500" };
-    if (strength >= 3) return { text: "Strong", color: "bg-green-500" };
-    // Default fallback
-    return { text: "Unknown", color: "bg-gray-500" };
+    if (strength <= 1)
+      return { text: t("register.passwordStrength.weak"), color: "bg-red-500" };
+    if (strength === 2)
+      return {
+        text: t("register.passwordStrength.medium"),
+        color: "bg-yellow-500",
+      };
+    if (strength >= 3)
+      return {
+        text: t("register.passwordStrength.strong"),
+        color: "bg-green-500",
+      };
+    return {
+      text: t("register.passwordStrength.unknown"),
+      color: "bg-gray-500",
+    };
   };
-
   const validateForm = () => {
     let newErrors: ErrorsType = {};
-    (Object.keys(formData) as FormDataKeys[]).forEach((key) => {
-      if (!formData[key]) newErrors[key] = "This field is required";
+    const requiredFields: FormDataKeys[] = [
+      "firstName",
+      "lastName",
+      "email",
+      "password",
+      "confirmPassword",
+      "mobileNumber",
+      "terms",
+    ];
+
+    requiredFields.forEach((key) => {
+      if (key !== "terms" && !formData[key]) {
+        newErrors[key] = t("register.errors.required");
+      }
     });
-    if (formData.password !== formData.confirmPassword) {
-      newErrors.confirmPassword = "Passwords do not match";
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (formData.email && !emailRegex.test(formData.email as string)) {
+      newErrors.email = t("register.errors.emailInvalid");
     }
+
+    if (formData.password !== formData.confirmPassword) {
+      newErrors.confirmPassword = t("register.errors.passwordMismatch");
+    }
+
+    const passwordValue = formData.password as string;
+
+    if (passwordValue.length > 0) {
+      if (passwordValue.length < 8) {
+        newErrors.password = t("register.errors.passwordMinLength");
+      } else if (!/[A-Z]/.test(passwordValue)) {
+        newErrors.password = t("register.errors.mustContainUppercase");
+      } else if (!/[a-z]/.test(passwordValue)) {
+        newErrors.password = t("register.errors.mustContainLowercase"); // ✅ الشرط الجديد
+      } else if (!/[0-9]/.test(passwordValue)) {
+        newErrors.password = t("register.errors.mustContainNumber");
+      } else if (!/[^A-Za-z0-9]/.test(passwordValue)) {
+        newErrors.password = t("register.errors.mustContainSymbol");
+      }
+    }
+
+    if (!formData.terms) {
+      newErrors.terms = t("register.errors.terms");
+    }
+
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleSubmit = (e: { preventDefault: () => void }) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (validateForm()) {
-      alert("Form submitted successfully!");
+      const success = await register(formData as any);
+      if (success) {
+        navigate("/");
+      }
     }
   };
 
   return (
     <>
       <Navbar />
-      <div className="bg-[var(--bg-secondary)] min-h-screen flex justify-center py-10">
+      <div className="bg-bg-secondary flex justify-center py-10">
         <form
           onSubmit={handleSubmit}
-          className="bg-[var(--bg-primary)] shadow-lg rounded-lg p-8 w-full max-w-6xl"
+          className="bg-bg-primary shadow-lg rounded-lg p-8 w-full max-w-6xl"
         >
-          <h2 className="text-2xl font-bold text-[var(--accent-brown)] mb-6">
-            Create New Customer Account
+          <h2 className="text-2xl font-bold text-[var(--color-primary)] mb-6">
+            {t("register.title")}
           </h2>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 border border-[var(--border-light)] rounded-md">
+          <div className="grid grid-cols-1 md:grid-cols-2 border border-light rounded-md">
             {/* Personal Information */}
-            <div className="p-6 border-b md:border-b-0 md:border-r border-[var(--border-light)]">
-              <h3 className="bg-[var(--accent-blue)] text-[var(--text-white)] px-4 py-2 rounded mb-4">
-                PERSONAL INFORMATION
+            <div className="p-6 border-b md:border-b-0 md:border-r border-light">
+              <h3 className="bg-primary text-white px-4 py-2 rounded mb-4">
+                {t("register.sections.personal")}
               </h3>
 
               {/* First Name */}
-              <label className="block mb-2 font-medium">FIRST NAME *</label>
-              <input
+              <InputField
+                id="firstName"
                 name="firstName"
-                value={formData.firstName}
-                onChange={handleChange}
-                className="w-full border border-[var(--border-light)] rounded p-2 mb-1"
+                type="text"
+                label={t("register.fields.firstName")}
+                value={formData.firstName as string}
+                onChange={handleInputChange}
+                error={errors.firstName}
+                icon={User}
+                isRTL={isRTL}
+                required={true}
               />
-              {errors.firstName && (
-                <p className="text-red-500 text-sm mb-3">{errors.firstName}</p>
-              )}
 
               {/* Last Name */}
-              <label className="block mb-2 font-medium">LAST NAME *</label>
-              <input
+              <InputField
+                id="lastName"
                 name="lastName"
-                value={formData.lastName}
-                onChange={handleChange}
-                className="w-full border border-[var(--border-light)] rounded p-2 mb-1"
+                type="text"
+                label={t("register.fields.lastName")}
+                value={formData.lastName as string}
+                onChange={handleInputChange}
+                error={errors.lastName}
+                icon={User}
+                isRTL={isRTL}
+                required={true}
               />
-              {errors.lastName && (
-                <p className="text-red-500 text-sm mb-3">{errors.lastName}</p>
-              )}
 
               {/* Email */}
-              <label className="block mb-2 font-medium">EMAIL *</label>
-              <input
+              <InputField
+                id="email"
                 name="email"
                 type="email"
-                value={formData.email}
-                onChange={handleChange}
-                className="w-full border border-[var(--border-light)] rounded p-2 mb-1"
+                label={t("register.fields.email")}
+                value={formData.email as string}
+                onChange={handleInputChange}
+                error={errors.email}
+                icon={Mail}
+                isRTL={isRTL}
+                required={true}
+                autoComplete="email"
               />
-              {errors.email && (
-                <p className="text-red-500 text-sm mb-3">{errors.email}</p>
-              )}
 
               {/* Password */}
-              <label className="block mb-2 font-medium">PASSWORD *</label>
-              <input
+              <InputField
+                id="password"
                 name="password"
                 type={showPassword ? "text" : "password"}
-                value={formData.password}
-                onChange={handleChange}
-                className="w-full border border-[var(--border-light)] rounded p-2 mb-1"
+                label={t("register.fields.password")}
+                value={formData.password as string}
+                onChange={handleInputChange}
+                error={errors.password}
+                icon={Lock}
+                isRTL={isRTL}
+                required={true}
+                autoComplete="new-password"
               />
               <p
                 className={`${
-                  getPasswordStrength(formData.password).color
-                } text-white text-sm px-2 py-1 mb-4`}
+                  getPasswordStrength(formData.password as string).color
+                } text-white text-sm px-2 py-1 mb-4 rounded`}
               >
-                Password Strength: {getPasswordStrength(formData.password).text}
+                {t("register.passwordStrength.label")}:{" "}
+                {getPasswordStrength(formData.password as string).text}
               </p>
-              {errors.password && (
-                <p className="text-red-500 text-sm mb-3">{errors.password}</p>
-              )}
 
               {/* Confirm Password */}
-              <label className="block mb-2 font-medium">
-                CONFIRM PASSWORD *
-              </label>
-              <input
+              <InputField
+                id="confirmPassword"
                 name="confirmPassword"
                 type={showPassword ? "text" : "password"}
-                value={formData.confirmPassword}
-                onChange={handleChange}
-                className="w-full border border-[var(--border-light)] rounded p-2 mb-1"
+                label={t("register.fields.confirmPassword")}
+                value={formData.confirmPassword as string}
+                onChange={handleInputChange}
+                error={errors.confirmPassword}
+                icon={Lock}
+                isRTL={isRTL}
+                required={true}
+                autoComplete="new-password"
               />
-              {errors.confirmPassword && (
-                <p className="text-red-500 text-sm mb-3">
-                  {errors.confirmPassword}
-                </p>
-              )}
 
               {/* Show Password */}
               <div className="flex items-center mb-4">
                 <input
                   type="checkbox"
                   className="mr-2"
+                  checked={showPassword}
                   onChange={() => setShowPassword(!showPassword)}
                 />
-                <span>SHOW PASSWORD</span>
+                <span>{t("register.fields.showPassword")}</span>
               </div>
 
               {/* Mobile */}
-              <label className="block mb-2 font-medium">MOBILE NUMBER *</label>
-              <input
-                name="mobile"
-                value={formData.mobile}
-                onChange={handleChange}
-                className="w-full border border-[var(--border-light)] rounded p-2 mb-1"
+              <InputField
+                id="mobileNumber"
+                name="mobileNumber"
+                type="tel"
+                label={t("register.fields.mobile")}
+                value={formData.mobileNumber as string}
+                onChange={handleInputChange}
+                error={errors.mobileNumber}
+                icon={Phone}
+                isRTL={isRTL}
+                required={true}
+                autoComplete="tel"
               />
-              {errors.mobile && (
-                <p className="text-red-500 text-sm mb-3">{errors.mobile}</p>
-              )}
             </div>
 
             {/* Company Information */}
             <div className="p-6">
-              <h3 className="bg-[var(--accent-blue)] text-[var(--text-white)] px-4 py-2 rounded mb-4">
-                COMPANY INFORMATION
+              <h3 className="bg-primary text-white px-4 py-2 rounded mb-4">
+                {t("register.sections.company")}
               </h3>
 
               {/* Company Name */}
-              <label className="block mb-2 font-medium">COMPANY NAME *</label>
-              <input
+              <InputField
+                id="companyName"
                 name="companyName"
-                value={formData.companyName}
-                onChange={handleChange}
-                className="w-full border border-[var(--border-light)] rounded p-2 mb-1"
+                type="text"
+                label={t("register.fields.companyName")}
+                value={formData.companyName as string}
+                onChange={handleInputChange}
+                error={errors.companyName}
+                icon={Building}
+                isRTL={isRTL}
+                required={false}
               />
-              {errors.companyName && (
-                <p className="text-red-500 text-sm mb-3">
-                  {errors.companyName}
-                </p>
-              )}
+
+              {/* Company Website */}
+              <InputField
+                id="companyWebsite"
+                name="companyWebsite"
+                type="url"
+                label={t("register.fields.companyWebsite")}
+                value={formData.companyWebsite as string}
+                onChange={handleInputChange}
+                error={errors.companyWebsite}
+                icon={Globe}
+                isRTL={isRTL}
+                required={false}
+              />
 
               {/* Phone Number */}
-              <label className="block mb-2 font-medium">PHONE NUMBER *</label>
-              <input
+              <InputField
+                id="phoneNumber"
                 name="phoneNumber"
-                value={formData.phoneNumber}
-                onChange={handleChange}
-                className="w-full border border-[var(--border-light)] rounded p-2 mb-1"
+                type="tel"
+                label={t("register.fields.phoneNumber")}
+                value={formData.phoneNumber as string}
+                onChange={handleInputChange}
+                error={errors.phoneNumber}
+                icon={Phone}
+                isRTL={isRTL}
+                required={false}
               />
-              {errors.phoneNumber && (
-                <p className="text-red-500 text-sm mb-3">
-                  {errors.phoneNumber}
-                </p>
-              )}
+
+              {/* VAT Number */}
+              <InputField
+                id="vatNumber"
+                name="vatNumber"
+                type="text"
+                label={t("register.fields.vatNumber")}
+                value={formData.vatNumber as string}
+                onChange={handleInputChange}
+                error={errors.vatNumber}
+                icon={CreditCard}
+                isRTL={isRTL}
+                required={false}
+              />
 
               {/* Street Address */}
-              <label className="block mb-2 font-medium">STREET ADDRESS *</label>
-              <input
+              <InputField
+                id="streetAddress"
                 name="streetAddress"
-                value={formData.streetAddress}
-                onChange={handleChange}
-                className="w-full border border-[var(--border-light)] rounded p-2 mb-1"
+                type="text"
+                label={t("register.fields.streetAddress")}
+                value={formData.streetAddress as string}
+                onChange={handleInputChange}
+                error={errors.streetAddress}
+                icon={MapPin}
+                isRTL={isRTL}
+                required={false}
               />
-              {errors.streetAddress && (
-                <p className="text-red-500 text-sm mb-3">
-                  {errors.streetAddress}
-                </p>
-              )}
 
               {/* City */}
-              <label className="block mb-2 font-medium">CITY *</label>
-              <input
+              <InputField
+                id="city"
                 name="city"
-                value={formData.city}
-                onChange={handleChange}
-                className="w-full border border-[var(--border-light)] rounded p-2 mb-1"
+                type="text"
+                label={t("register.fields.city")}
+                value={formData.city as string}
+                onChange={handleInputChange}
+                error={errors.city}
+                icon={MapPin}
+                isRTL={isRTL}
+                required={false}
               />
-              {errors.city && (
-                <p className="text-red-500 text-sm mb-3">{errors.city}</p>
+
+              {/* Country */}
+              <div className="mb-4">
+                <label
+                  htmlFor="country"
+                  className="block text-sm font-medium text-secondary mb-1"
+                >
+                  {t("register.fields.country")} *
+                </label>
+                <div className="relative">
+                  <select
+                    id="country"
+                    name="country"
+                    value={formData.country as string}
+                    onChange={handleInputChange}
+                    className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-primary ${
+                      errors.country ? "border-red-500" : "border-light"
+                    } ${isRTL ? "pr-10" : "pl-10"}`}
+                    required
+                  >
+                    <option value="">
+                      {t("register.fields.selectCountry")}
+                    </option>
+                    {countries.map((country) => (
+                      <option key={country.id} value={country.name}>
+                        {country.name}
+                      </option>
+                    ))}
+                  </select>
+                  <MapPin
+                    className={`absolute top-3 h-5 w-5 text-gray-400 ${
+                      isRTL ? "right-3" : "left-3"
+                    }`}
+                  />
+                </div>
+                {errors.country && (
+                  <p className="text-red-500 text-sm mt-1">{errors.country}</p>
+                )}
+              </div>
+
+              {/* State/County */}
+              <InputField
+                id="state"
+                name="state"
+                type="text"
+                label={t("register.fields.state")}
+                value={formData.state as string}
+                onChange={handleInputChange}
+                error={errors.state}
+                icon={MapPin}
+                isRTL={isRTL}
+                required={false}
+              />
+
+              {/* Zip/Postal Code */}
+              <InputField
+                id="zipCode"
+                name="zipCode"
+                type="text"
+                label={t("register.fields.zip")}
+                value={formData.zipCode as string}
+                onChange={handleInputChange}
+                error={errors.zipCode}
+                icon={MapPin}
+                isRTL={isRTL}
+                required={false}
+              />
+              <div className="flex items-center mt-4">
+                <input
+                  type="checkbox"
+                  name="terms"
+                  checked={formData.terms as boolean}
+                  onChange={handleInputChange}
+                  className="mr-2"
+                />
+                <span>{t("register.fields.terms")}</span>
+              </div>
+              {errors.terms && (
+                <p className="text-red-500 text-sm mb-3">{errors.terms}</p>
               )}
 
               {/* Submit */}
               <button
                 type="submit"
-                className="bg-[var(--primary-gold)] hover:bg-[var(--primary-gold-dark)] text-white px-6 py-2 rounded shadow-md mt-4"
+                disabled={loading}
+                className="bg-[var(--color-primary)] hover:bg-primary text-white px-6 py-2 rounded shadow-md mt-4 transition-colors duration-200 disabled:opacity-50"
               >
-                REGISTER FOR PRICING
+                {loading ? t("register.loading") : t("register.submitButton")}
               </button>
             </div>
           </div>

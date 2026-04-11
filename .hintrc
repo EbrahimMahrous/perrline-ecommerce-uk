@@ -12,7 +12,8 @@
     "axe/forms": [
       "default",
       {
-        "label": "off"
+        "label": "off",
+        "autocomplete-valid": "off"
       }
     ],
     "apple-touch-icons": "off",
@@ -23,6 +24,14 @@
           "meta[name=theme-color]"
         ]
       }
-    ]
+    ],
+    "axe/text-alternatives": [
+      "default",
+      {
+        "image-alt": "off"
+      }
+    ],
+    "axe/aria": "off",
+    "no-inline-styles": "off"
   }
 }

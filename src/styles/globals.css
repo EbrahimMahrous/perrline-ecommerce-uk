@@ -1,42 +1,33 @@
-/* =========================
-   Global Color Variables
-   ========================= */
 :root {
   /* Primary Colors */
-  --primary-gold: #c79c40;
-  --primary-gold-dark: #a17d33;
-  --primary-gold-light: #e3bb63;
-
+  --color-primary: #254C59;
+  --color-primary-dark: #1c3a44;
+  --color-primary-light: #3a6d82;
   /* Accent Colors */
-  --accent-brown: #5a4632;
-  --accent-cream: #f8f3e6;
-  --accent-green: #6d8c3d;
-  --accent-blue: #3a6c85;
-
+  --color-accent-1: #039FE0;
+  --color-accent-2: #e6f4fa;
+  --color-accent-3: #0278a8;
+  --color-accent-4: #0388c4;
+  --color-accent-4-dark: #026fa0;
   /* Background Colors */
   --bg-primary: #ffffff;
-  --bg-secondary: #faf8f4;
-
+  --bg-secondary: #f5f9fc;
   /* Text Colors */
-  --text-primary: #1e1e1e;
-  --text-secondary: #5b5b5b;
+  --text-primary: #1a2a32;
+  --text-secondary: #3d4e5d;
   --text-white: #ffffff;
-  --text-muted: #8a8a8a;
-
+  --text-muted: #6b7a85;
   /* Border Colors */
-  --border-light: #e4e2dd;
-  --border-medium: #c4c0b7;
-
+  --border-light: #d1e0e9;
+  --border-medium: #9bbbcb;
   /* Shadows */
-  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
-  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
-  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1),
-    0 4px 6px -2px rgb(0 0 0 / 0.05);
+  --shadow-sm: 0 1px 2px 0 rgba(37, 76, 89, 0.05);
+  --shadow-md: 0 4px 6px -1px rgba(37, 76, 89, 0.1),
+    0 2px 4px -2px rgba(37, 76, 89, 0.06);
+  --shadow-lg: 0 10px 15px -3px rgba(37, 76, 89, 0.1),
+    0 4px 6px -2px rgba(37, 76, 89, 0.05);
 }
-
-/* =========================
-   Utility Classes - Text
-   ========================= */
+/*  Utility Classes - Text  */
 .text-primary {
   color: var(--text-primary);
 }
@@ -49,64 +40,55 @@
 .text-muted {
   color: var(--text-muted);
 }
-
-/* =========================
-   Utility Classes - Background
-   ========================= */
-.bg-gold {
-  background-color: var(--primary-gold);
-}
-.bg-gold-light {
-  background-color: var(--primary-gold-light);
-}
-.bg-accent-blue {
-  background-color: var(--accent-blue);
-}
-.bg-accent-green {
-  background-color: var(--accent-green);
-}
-.bg-accent-brown {
-  background-color: var(--accent-brown);
-}
-.bg-accent-cream {
-  background-color: var(--accent-cream);
-}
+/*  Utility Classes - Background  */
 .bg-primary {
+  background-color: var(--color-primary);
+}
+.bg-primary-dark {
+  background-color: var(--color-primary-dark);
+}
+.bg-primary-light {
+  background-color: var(--color-primary-light);
+}
+.bg-accent-4 {
+  background-color: var(--color-accent-4);
+}
+.bg-accent-3 {
+  background-color: var(--color-accent-3);
+}
+.bg-accent-1 {
+  background-color: var(--color-accent-1);
+}
+.bg-accent-2 {
+  background-color: var(--color-accent-2);
+}
+.bg-bg-primary {
   background-color: var(--bg-primary);
 }
-.bg-secondary {
+.bg-bg-secondary {
   background-color: var(--bg-secondary);
 }
-
-/* =========================
-   Utility Classes - Hover
-   ========================= */
-.hover-gold:hover {
-  background-color: var(--primary-gold-dark);
+/*  Utility Classes - Hover  */
+.hover-primary:hover {
+  background-color: var(--color-primary-dark);
   color: var(--text-white);
 }
-.hover-accent-blue:hover {
-  background-color: #2d5467;
+.hover-accent-4:hover {
+  background-color: var(--color-accent-4-dark);
   color: var(--text-white);
 }
-.hover-accent-green:hover {
-  background-color: #556c2e;
+.hover-accent-3:hover {
+  background-color: #015d82;
   color: var(--text-white);
 }
-
-/* =========================
-   Utility Classes - Borders
-   ========================= */
+/*  Utility Classes - Borders  */
 .border-light {
   border-color: var(--border-light);
 }
 .border-medium {
   border-color: var(--border-medium);
 }
-
-/* =========================
-   Utility Classes - Shadows
-   ========================= */
+/*  Utility Classes - Shadows  */
 .shadow-sm {
   box-shadow: var(--shadow-sm);
 }
@@ -116,10 +98,7 @@
 .shadow-lg {
   box-shadow: var(--shadow-lg);
 }
-
-/* =========================
-   Responsive Container
-   ========================= */
+/*  Responsive Container  */
 .container-custom {
   width: 100%;
   margin-left: auto;
@@ -127,7 +106,6 @@
   padding-left: 1rem;
   padding-right: 1rem;
 }
-
 @media (min-width: 640px) {
   .container-custom {
     max-width: 640px;
@@ -153,10 +131,7 @@
     max-width: 1536px;
   }
 }
-
-/* =========================
-   Animations
-   ========================= */
+/*  Animations  */
 @keyframes fadeIn {
   from {
     opacity: 0;
