@@ -331,7 +331,7 @@ export default function ContactUs() {
                           {t("contactUs.info.phone.title")}
                         </h5>
                         <p className="text-[var(--text-secondary)]">
-                          +44 (0) 7443 715 994
+                          +966544310033
                         </p>
                         <p className="text-sm text-[var(--text-muted)]">
                           {t("contactUs.info.phone.hours")}
@@ -347,7 +347,7 @@ export default function ContactUs() {
                           {t("contactUs.info.email.title")}
                         </h5>
                         <p className="text-[var(--text-secondary)]">
-                          mohamedmansi@pearline.co.uk
+                          Info@pearline.com
                         </p>
                         <p className="text-sm text-[var(--text-muted)]">
                           {t("contactUs.info.email.response")}

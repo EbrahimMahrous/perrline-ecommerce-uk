@@ -15,5 +15,5 @@ export default defineConfig({
       },
     },
   },
-  base: "/perrline-ecommerce-uk/",
+  base: "/",
 });

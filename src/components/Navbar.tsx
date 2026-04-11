@@ -9,7 +9,7 @@ import {
   Languages,
 } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
-import logo from "../assets/final-logo.png";
+import logo from "../assets/final-logo.jpeg";
 import { useTranslation, LANGUAGES } from "../i18n";
 import beautyIcon from "../assets/beauty.png";
 import armhammer from "../assets/AllBrands/armhammer.jpg";

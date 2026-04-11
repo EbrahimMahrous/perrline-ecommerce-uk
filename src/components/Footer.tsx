@@ -30,7 +30,7 @@ export default function Footer() {
         {
           icon: <FaPhone className="w-4 h-4" />,
           text: t("footer.phone"),
-          link: "tel:+447443715994",
+          link: "tel:+966544310033",
         },
         {
           icon: <FaEnvelope className="w-4 h-4" />,
