@@ -13,7 +13,7 @@ createRoot(document.getElementById("root")!).render(
     <AuthProvider>
       <CartProvider>
         <ContactProvider>
-          <BrowserRouter basename="/perrline-ecommerce-uk">
+          <BrowserRouter>
             <TranslationProvider>
               <App />
             </TranslationProvider>
@@ -21,5 +21,5 @@ createRoot(document.getElementById("root")!).render(
         </ContactProvider>
       </CartProvider>
     </AuthProvider>
-  </StrictMode>
+  </StrictMode>,
 );
