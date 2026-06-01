@@ -41,7 +41,7 @@ export default function ContactUs() {
   const [apiError, setApiError] = useState<string | null>(null);
 
   const handleInputChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
   ) => {
     const { name, value } = e.target;
     setFormData({
@@ -119,7 +119,7 @@ export default function ContactUs() {
         console.log("API response status:", response.status);
         console.log(
           "API response headers:",
-          Object.fromEntries(response.headers.entries())
+          Object.fromEntries(response.headers.entries()),
         );
 
         if (!response.ok) {
@@ -149,7 +149,7 @@ export default function ContactUs() {
         } catch (parseError) {
           console.log(
             "No JSON response, but request succeeded with status:",
-            response.status
+            response.status,
           );
         }
         setIsSubmitted(true);
@@ -166,7 +166,7 @@ export default function ContactUs() {
           error instanceof Error ? error.message : "Unknown error occurred";
         setApiError(
           t("contactUs.errors.apiError") ||
-            `Failed to send message: ${errorMessage}. Please try again later.`
+            `Failed to send message: ${errorMessage}. Please try again later.`,
         );
       } finally {
         setIsLoading(false);
@@ -331,7 +331,7 @@ export default function ContactUs() {
                           {t("contactUs.info.phone.title")}
                         </h5>
                         <p className="text-[var(--text-secondary)]">
-                          +966544310033
+                          +44 (0) 7443 715 994
                         </p>
                         <p className="text-sm text-[var(--text-muted)]">
                           {t("contactUs.info.phone.hours")}
@@ -347,7 +347,7 @@ export default function ContactUs() {
                           {t("contactUs.info.email.title")}
                         </h5>
                         <p className="text-[var(--text-secondary)]">
-                          Info@pearline.com
+                          info@pearline.co.uk
                         </p>
                         <p className="text-sm text-[var(--text-muted)]">
                           {t("contactUs.info.email.response")}

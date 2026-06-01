@@ -30,12 +30,12 @@ export default function Footer() {
         {
           icon: <FaPhone className="w-4 h-4" />,
           text: t("footer.phone"),
-          link: "tel:+966544310033",
+          link: "tel:+447443715994",
         },
         {
           icon: <FaEnvelope className="w-4 h-4" />,
           text: t("footer.email"),
-          link: "mailto:mohamedmansi@pearline.co.uk",
+          link: "mailto:info@pearline.co.uk",
         },
       ],
     },
