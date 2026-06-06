@@ -2,3 +2,4 @@ deployment:
   tasks:
     - export DEPLOYPATH=/home/pearline/public_html/
     - /bin/cp -R dist/* $DEPLOYPATH
+    - /bin/cp .htaccess $DEPLOYPATH  
