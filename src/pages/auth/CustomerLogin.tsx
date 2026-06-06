@@ -22,7 +22,7 @@ export default function CustomerLogin() {
   const { login, loading, error, clearError } = useAuth();
 
   const handleInputChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
   ) => {
     const { name, value } = e.target;
     setFormData((prevState) => ({
@@ -142,7 +142,6 @@ export default function CustomerLogin() {
                   </div>
                 </div>
 
-                {/* Actions */}
                 <div className="flex items-center gap-4 pt-2">
                   <button
                     type="submit"
@@ -161,9 +160,9 @@ export default function CustomerLogin() {
               </form>
             </div>
           </div>
-          {/* New Custommers */}
+          {/* New Customers */}
           <div className="border-t md:border-t-0 md:border-l border-light flex flex-col">
-            <div className="bg-accent-4 text-white  font-semibold text-lg px-6 py-4">
+            <div className="bg-accent-4 text-white font-semibold text-lg px-6 py-4">
               {t("login.newCustomersTitle")}
             </div>
             <div className="p-8 space-y-5 flex-1 flex flex-col justify-center">

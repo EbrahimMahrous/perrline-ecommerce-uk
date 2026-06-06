@@ -7,7 +7,7 @@ export default defineConfig({
   server: {
     proxy: {
       "/api": {
-        target: "https://authpearlineapi.runasp.net",
+        target: "http://project-pearline-api.runasp.net",
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/api/, "/api"),
         secure: false,

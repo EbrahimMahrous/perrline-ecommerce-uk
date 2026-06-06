@@ -75,7 +75,7 @@ export default function CreateAccount() {
   const handleInputChange = (
     e: React.ChangeEvent<
       HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
-    >
+    >,
   ) => {
     const target = e.target as HTMLInputElement;
     const { name, value, type } = target;
@@ -91,8 +91,9 @@ export default function CreateAccount() {
       }));
     }
   };
+
   const getPasswordStrength = (
-    password: string
+    password: string,
   ): { text: string; color: string } => {
     if (!password)
       return {
@@ -122,6 +123,7 @@ export default function CreateAccount() {
       color: "bg-gray-500",
     };
   };
+
   const validateForm = () => {
     let newErrors: ErrorsType = {};
     const requiredFields: FormDataKeys[] = [
@@ -157,7 +159,7 @@ export default function CreateAccount() {
       } else if (!/[A-Z]/.test(passwordValue)) {
         newErrors.password = t("register.errors.mustContainUppercase");
       } else if (!/[a-z]/.test(passwordValue)) {
-        newErrors.password = t("register.errors.mustContainLowercase"); // ✅ الشرط الجديد
+        newErrors.password = t("register.errors.mustContainLowercase");
       } else if (!/[0-9]/.test(passwordValue)) {
         newErrors.password = t("register.errors.mustContainNumber");
       } else if (!/[^A-Za-z0-9]/.test(passwordValue)) {
@@ -202,7 +204,6 @@ export default function CreateAccount() {
                 {t("register.sections.personal")}
               </h3>
 
-              {/* First Name */}
               <InputField
                 id="firstName"
                 name="firstName"
@@ -216,7 +217,6 @@ export default function CreateAccount() {
                 required={true}
               />
 
-              {/* Last Name */}
               <InputField
                 id="lastName"
                 name="lastName"
@@ -230,7 +230,6 @@ export default function CreateAccount() {
                 required={true}
               />
 
-              {/* Email */}
               <InputField
                 id="email"
                 name="email"
@@ -245,7 +244,6 @@ export default function CreateAccount() {
                 autoComplete="email"
               />
 
-              {/* Password */}
               <InputField
                 id="password"
                 name="password"
@@ -268,7 +266,6 @@ export default function CreateAccount() {
                 {getPasswordStrength(formData.password as string).text}
               </p>
 
-              {/* Confirm Password */}
               <InputField
                 id="confirmPassword"
                 name="confirmPassword"
@@ -283,7 +280,6 @@ export default function CreateAccount() {
                 autoComplete="new-password"
               />
 
-              {/* Show Password */}
               <div className="flex items-center mb-4">
                 <input
                   type="checkbox"
@@ -294,7 +290,6 @@ export default function CreateAccount() {
                 <span>{t("register.fields.showPassword")}</span>
               </div>
 
-              {/* Mobile */}
               <InputField
                 id="mobileNumber"
                 name="mobileNumber"
@@ -316,7 +311,6 @@ export default function CreateAccount() {
                 {t("register.sections.company")}
               </h3>
 
-              {/* Company Name */}
               <InputField
                 id="companyName"
                 name="companyName"
@@ -330,7 +324,6 @@ export default function CreateAccount() {
                 required={false}
               />
 
-              {/* Company Website */}
               <InputField
                 id="companyWebsite"
                 name="companyWebsite"
@@ -344,7 +337,6 @@ export default function CreateAccount() {
                 required={false}
               />
 
-              {/* Phone Number */}
               <InputField
                 id="phoneNumber"
                 name="phoneNumber"
@@ -358,7 +350,6 @@ export default function CreateAccount() {
                 required={false}
               />
 
-              {/* VAT Number */}
               <InputField
                 id="vatNumber"
                 name="vatNumber"
@@ -372,7 +363,6 @@ export default function CreateAccount() {
                 required={false}
               />
 
-              {/* Street Address */}
               <InputField
                 id="streetAddress"
                 name="streetAddress"
@@ -386,7 +376,6 @@ export default function CreateAccount() {
                 required={false}
               />
 
-              {/* City */}
               <InputField
                 id="city"
                 name="city"
@@ -439,7 +428,6 @@ export default function CreateAccount() {
                 )}
               </div>
 
-              {/* State/County */}
               <InputField
                 id="state"
                 name="state"
@@ -453,7 +441,6 @@ export default function CreateAccount() {
                 required={false}
               />
 
-              {/* Zip/Postal Code */}
               <InputField
                 id="zipCode"
                 name="zipCode"
@@ -480,7 +467,6 @@ export default function CreateAccount() {
                 <p className="text-red-500 text-sm mb-3">{errors.terms}</p>
               )}
 
-              {/* Submit */}
               <button
                 type="submit"
                 disabled={loading}
